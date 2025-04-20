@@ -45,7 +45,7 @@ def first(message):
             bot.all_resistorsT = File_open(src)
             bot.all_resistorsLS = bot.all_resistorsT.split()
             bot.all_resistors = list(map(float, bot.all_resistorsLS)) 
-            if set(bot.all_resistors) > bot.all_resistors:
+            if list(set(bot.all_resistors)) > bot.all_resistors:
                 err = int('ERROR')
             for i in bot.all_resistors:
                 err = int('ERROR') if i <= 0 else True

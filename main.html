@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resistance Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Калькулятор сопротивлений в источнике питания на основе операционного усилителя</h1>
+        
+        <div class="input-row">
+            <span class="input-label">Загрузить номиналы резисторов (.txt):</span>
+            <input type="file" id="resistor-file" class="input-field" accept=".txt,">
+        </div>
+        
+        <div class="input-row">
+            <span class="input-label">V<sub>ref</sub> - опорное напряжение:</span>
+            <input type="number" id="vref" class="input-field" placeholder="0.00" step="0.5" min="0">
+        </div>
+        
+        <div class="input-row">
+            <span class="input-label">V<sub>out</sub> - выходное напряжение:</span>
+            <input type="number" id="vout" class="input-field" placeholder="0.00" step="0.5" min="0">
+        </div>
+        
+        <button id="calculate-btn">Рассчитать!</button>
+        
+        <div class="results">
+            <h2>Результаты:</h2>
+            <div id="output">Здесь будут результаты...</div>
+        </div>
+
+    <div> <img src="img/V1.png" width="318" height="291"></div>
+    </div>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', async function() {
+            const fileInput = document.getElementById('resistor-file');
+            const vref = parseFloat(document.getElementById('vref').value);
+            const vout = parseFloat(document.getElementById('vout').value);
+            const outputDiv = document.getElementById('output');
+
+            if (!fileInput.files[0] || isNaN(vref) || isNaN(vout)) {
+                outputDiv.textContent = "Ошибка: заполните все поля!";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = async function(e) {
+                const text = e.target.result;
+                const resistors = text.split('\n').map(line => parseFloat(line.trim())).filter(val => !isNaN(val));
+                
+                if (resistors.length === 0) {
+                    outputDiv.textContent = "Ошибка: файл не содержит чисел!";
+                    return;
+                }
+                
+                try {
+                    const result = await eel.ResistanceCalc(vout, vref, resistors)();
+                    outputDiv.innerHTML = result.replace(/\n/g, '<br>');
+                } catch (error) {
+                    outputDiv.textContent = "Ошибка: " + error.message;
+                }
+            };
+
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+</html>

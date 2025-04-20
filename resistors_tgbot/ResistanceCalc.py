@@ -12,7 +12,7 @@ def Paralel_count(r1, r2):
     return r1 * r2 / (r1 + r2)
 
 
-TOKEN = '7517793097:AAFmS9Tc5LEX8PO7tj77lMsJDW6ktjkwQ28'  #bot token from @BotFather t.me/ResistanceCalculator_bot
+TOKEN = 'YOURTOKEN'  #bot token from @BotFather t.me/ResistanceCalculator_bot
 bot = TeleBot(TOKEN)
 bot.flag_waiting_v_ref = False
 bot.flag_waiting_v_out = False
